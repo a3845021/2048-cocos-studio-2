@@ -1,0 +1,35 @@
+<Solution>
+  <PropertyGroup Name="2048Clone" Version="3.10.0.0" Type="CocosStudio" />
+  <SolutionFolder>
+    <Group ctype="ResourceGroup">
+      <RootFolder Name=".">
+        <Folder Name="Assets">
+          <Folder Name="Fonts">
+            <TTF Name="ClearSans-Bold.ttf" />
+            <TTF Name="ClearSans-Light.ttf" />
+            <TTF Name="ClearSans-Medium.ttf" />
+          </Folder>
+          <Folder Name="Images">
+            <Image Name="2048_bg.png" />
+            <Image Name="main_bg.png" />
+            <Image Name="score_bg.png" />
+            <Image Name="tile_0.png" />
+            <Image Name="tile_1024.png" />
+            <Image Name="tile_128.png" />
+            <Image Name="tile_16.png" />
+            <Image Name="tile_2.png" />
+            <Image Name="tile_2048.png" />
+            <Image Name="tile_256.png" />
+            <Image Name="tile_32.png" />
+            <Image Name="tile_4.png" />
+            <Image Name="tile_512.png" />
+            <Image Name="tile_64.png" />
+            <Image Name="tile_8.png" />
+          </Folder>
+        </Folder>
+        <Project Name="MainScene.csd" Type="Scene" />
+        <Project Name="Tile.csd" Type="Node" />
+      </RootFolder>
+    </Group>
+  </SolutionFolder>
+</Solution>
