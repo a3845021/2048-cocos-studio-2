@@ -11,7 +11,7 @@
 
 const int ROWS = 4;
 const float SLIDE_ANIMATION_TIME = 0.167f;
-const float DELAY_FUNCTION_TIME = 0.2f;
+const float DELAY_FUNCTION_TIME = 0.167f;
 
 enum class Direction {
     LEFT,

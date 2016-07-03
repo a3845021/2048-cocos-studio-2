@@ -160,14 +160,14 @@ void HelloWorld::newgame(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventT
                 gameOver = false;
                 overText->setVisible(false);
             }
-
+            
         }
             break;
         default:
             break;
     }
     
-    }
+}
 
 void HelloWorld::setupGrid()
 {
@@ -181,15 +181,15 @@ void HelloWorld::setupGrid()
         {
             Tile2048* tile = dynamic_cast<Tile2048*>(CSLoader::createNode("Tile.csb"));
             tile->setScreenWidth(screenWidth);
-            tile->setMainGrid(this->mainGrid);
+            tile->setLocalZOrder(1);
             tile->setWidth(130);
             tile->setPositionBasedOnRowColumn(row, col);
             tile->setNumber(0);
-
+            
             mainGrid->addChild(tile);
         }
     }
-
+    
     
     tileArray.reserve(ROWS * ROWS);
     
@@ -199,7 +199,7 @@ void HelloWorld::setupGrid()
         {
             Tile2048* tile = dynamic_cast<Tile2048*>(CSLoader::createNode("Tile.csb"));
             tile->setScreenWidth(screenWidth);
-            tile->setMainGrid(this->mainGrid);
+            tile->setLocalZOrder(100);
             tile->setWidth(130);
             tile->setPositionBasedOnRowColumn(row, col);
             tile->setNumber(0);
@@ -261,30 +261,30 @@ void HelloWorld::update(float dt)
 {
     if (true == isTouchDown)
     {
-        if (initialTouchPos[0] - currentTouchPos[0] > visibleSize.width * 0.04)
+        if (initialTouchPos[0] - currentTouchPos[0] > visibleSize.width * 0.05)
         {
-//            CCLOG("SWIPED LEFT");
+            //            CCLOG("SWIPED LEFT");
             onSwipe(Direction::LEFT);
             isTouchDown = false;
             
         }
-        else if (initialTouchPos[0] - currentTouchPos[0] < - visibleSize.width * 0.04)
+        else if (initialTouchPos[0] - currentTouchPos[0] < - visibleSize.width * 0.05)
         {
-//            CCLOG("SWIPED RIGHT");
+            //            CCLOG("SWIPED RIGHT");
             onSwipe(Direction::RIGHT);
             isTouchDown = false;
             
         }
-        else if (initialTouchPos[1] - currentTouchPos[1] > visibleSize.width * 0.04)
+        else if (initialTouchPos[1] - currentTouchPos[1] > visibleSize.width * 0.06)
         {
-//            CCLOG("SWIPED DOWN");
+            //            CCLOG("SWIPED DOWN");
             onSwipe(Direction::DOWN);
             isTouchDown = false;
             
         }
-        else if (initialTouchPos[1] - currentTouchPos[1] < - visibleSize.width * 0.04)
+        else if (initialTouchPos[1] - currentTouchPos[1] < - visibleSize.width * 0.06)
         {
-//            CCLOG("SWIPED UP");
+            //            CCLOG("SWIPED UP");
             onSwipe(Direction::UP);
             isTouchDown = false;
         }
@@ -334,16 +334,16 @@ void HelloWorld::generateNewTile()
             int j = generateRandomIndex(0, ROWS);
             if (tileArray.at(i * ROWS + j)->isEmpty())
             {
-//                float random = CCRANDOM_0_1();
-//                if (random < 0.5f)
-//                {
-                    tileArray.at(i * ROWS + j)->setNumber(2);
-                    tileArray.at(i * ROWS + j)->runShowAnimation();
-//                }
-//                else
-//                {
-//                    tileArray.at(i * ROWS + j)->setNumber(4);
-//                }
+                //                float random = CCRANDOM_0_1();
+                //                if (random < 0.5f)
+                //                {
+                tileArray.at(i * ROWS + j)->setNumber(2);
+                tileArray.at(i * ROWS + j)->runShowAnimation();
+                //                }
+                //                else
+                //                {
+                //                    tileArray.at(i * ROWS + j)->setNumber(4);
+                //                }
                 flag = false;
             }
         }
@@ -532,28 +532,39 @@ void HelloWorld::moveLeftAnimation()
             {
                 if (j < ROWS - 1 && tileArray.at(i * ROWS + j)->equals(tileArray.at(i * ROWS +j + 1)))
                 {
-                    tileArray.at(i * ROWS + j + 1)->move(Direction::LEFT, 1);
-                    tileArray.at(i * ROWS + j + 1)->setIsMoving(true);
+                    tileArray.at(i * ROWS + j + 1)->increaseNumOfMovesByOne();
+                    for (int k = j + 2; k < ROWS; k++)
+                    {
+                        tileArray.at(i * ROWS + k)->increaseNumOfMovesByOne();
+                    }
                 }
             }
             else
             {
                 for(int k = j + 1; k < ROWS; k++)
                 {
-                    if(!tileArray.at(i * ROWS + k)->isEmpty() && !tileArray.at(i * ROWS + k)->getIsMoving())
+                    if(!tileArray.at(i * ROWS + k)->isEmpty())
                     {
-                        int moveByTiles = k - j;
-                        if (j > 0)
-                            moveByTiles += 1;
-                        tileArray.at(i * ROWS + k)->move(Direction::LEFT, moveByTiles);
-                        tileArray.at(i * ROWS + k)->setIsMoving(true);
-                        break;
+                        tileArray.at(i * ROWS + k)->increaseNumOfMovesByOne();
                     }
                 }
             }
             
         }
     }
+    
+    for(int i = 0; i < ROWS; i++)
+    {
+        for(int j = 0; j < ROWS; j++)
+        {
+            if(!tileArray.at(i * ROWS + j)->isEmpty())
+            {
+                tileArray.at(i * ROWS + j)->move(Direction::LEFT);
+                tileArray.at(i * ROWS + j)->setIsMoving(true);
+            }
+        }
+    }
+    
 }
 
 void HelloWorld::moveLeft()
@@ -601,27 +612,36 @@ void HelloWorld::moveRightAnimation()
             {
                 if (j > 0 && tileArray.at(i * ROWS + j)->equals(tileArray.at(i * ROWS +j - 1)))
                 {
-                    tileArray.at(i * ROWS + j - 1)->move(Direction::RIGHT, 1);
-                    tileArray.at(i * ROWS + j - 1)->setIsMoving(true);
+                    tileArray.at(i * ROWS + j - 1)->increaseNumOfMovesByOne();
+                    for (int k = j - 2; k > 0; k--)
+                    {
+                        tileArray.at(i * ROWS + k)->increaseNumOfMovesByOne();
+                    }
                 }
             }
             else
             {
                 for(int k = j - 1; k >= 0; k--)
                 {
-                    if(!tileArray.at(i * ROWS + k)->isEmpty() && !tileArray.at(i * ROWS + k)->getIsMoving())
+                    if(!tileArray.at(i * ROWS + k)->isEmpty())
                     {
-                        int moveByTiles = j - k;
-                        if (j < ROWS - 1)
-                            moveByTiles += 1;
-                        tileArray.at(i * ROWS + k)->move(Direction::RIGHT, moveByTiles);
-                        tileArray.at(i * ROWS + k)->setIsMoving(true);
-                        break;
+                        tileArray.at(i * ROWS + k)->increaseNumOfMovesByOne();
                     }
                 }
-                
             }
             
+        }
+    }
+    
+    for(int i = 0; i < ROWS; i++)
+    {
+        for(int j= ROWS - 1; j >= 0; j--)
+        {
+            if(!tileArray.at(i * ROWS + j)->isEmpty())
+            {
+                tileArray.at(i * ROWS + j)->move(Direction::RIGHT);
+                tileArray.at(i * ROWS + j)->setIsMoving(true);
+            }
         }
     }
 }
@@ -664,26 +684,36 @@ void HelloWorld::moveUpAnimation()
             {
                 if (j < ROWS - 1 && tileArray.at(j * ROWS + i)->equals(tileArray.at((j + 1) * ROWS + i)))
                 {
-                    tileArray.at((j + 1) * ROWS + i)->move(Direction::UP, 1);
-                    tileArray.at((j + 1) * ROWS + i )->setIsMoving(true);
+                    tileArray.at((j + 1) * ROWS + i)->increaseNumOfMovesByOne();
+                    for (int k = j + 2; k < ROWS; k++)
+                    {
+                        tileArray.at(k * ROWS + i)->increaseNumOfMovesByOne();
+                    }
                 }
             }
             else
             {
                 for(int k = j + 1; k < ROWS; k++)
                 {
-                    if(!tileArray.at(k * ROWS + i)->isEmpty() && !tileArray.at(k * ROWS + i)->getIsMoving())
+                    if(!tileArray.at(k * ROWS + i)->isEmpty())
                     {
-                        int moveByTiles = k - j;
-                        if (j > 0)
-                            moveByTiles += 1;
-                        tileArray.at(k * ROWS + i)->move(Direction::UP, moveByTiles);
-                        tileArray.at(k * ROWS + i)->setIsMoving(true);
-                        break;
+                        tileArray.at(k * ROWS + i)->increaseNumOfMovesByOne();
                     }
                 }
             }
             
+        }
+    }
+    
+    for(int i = 0; i < ROWS; i++)
+    {
+        for(int j = 0; j < ROWS; j++)
+        {
+            if(!tileArray.at(j * ROWS + i)->isEmpty())
+            {
+                tileArray.at(j * ROWS + i)->move(Direction::UP);
+                tileArray.at(j * ROWS + i)->setIsMoving(true);
+            }
         }
     }
 }
@@ -731,26 +761,35 @@ void HelloWorld::moveDownAnimation()
             {
                 if (j > 0 && tileArray.at(j * ROWS + i)->equals(tileArray.at((j - 1) * ROWS + i)))
                 {
-                    tileArray.at((j - 1) * ROWS + i)->move(Direction::DOWN, 1);
-                    tileArray.at((j - 1) * ROWS + i)->setIsMoving(true);
+                    tileArray.at((j - 1) * ROWS + i)->increaseNumOfMovesByOne();
+                    for (int k = j - 2; k > 0; k--)
+                    {
+                        tileArray.at(k * ROWS + i)->increaseNumOfMovesByOne();
+                    }
                 }
             }
             else
             {
-                for(int k = j-1; k >= 0; k--)
+                for(int k = j - 1; k >= 0; k--)
                 {
                     if(!tileArray.at(k * ROWS + i)->isEmpty() && !tileArray.at(k * ROWS + i)->getIsMoving())
                     {
-                        int moveByTiles = j - k;
-                        if (j < ROWS - 1)
-                            moveByTiles += 1;
-                        tileArray.at(k * ROWS + i)->move(Direction::DOWN, moveByTiles);
-                        tileArray.at(k * ROWS + i)->setIsMoving(true);
-                        break;
+                        tileArray.at(k * ROWS + i)->increaseNumOfMovesByOne();
                     }
                 }
             }
             
+        }
+    }
+    for(int i = 0; i < ROWS; i++)
+    {
+        for(int j = ROWS - 1;j >= 0; j--)
+        {
+            if(!tileArray.at(j * ROWS + i)->isEmpty())
+            {
+                tileArray.at(j * ROWS + i)->move(Direction::DOWN);
+                tileArray.at(j * ROWS + i)->setIsMoving(true);
+            }
         }
     }
 }
@@ -867,7 +906,7 @@ bool HelloWorld::onTouchBegan(Touch *touch, Event *event)
     
     isTouchDown = true;
     
-//    CCLOG("onTouchBegan ID: %d, X: %f, Y: %f", touch->getID(), touch->getLocation().x, touch->getLocation().y);
+    //    CCLOG("onTouchBegan ID: %d, X: %f, Y: %f", touch->getID(), touch->getLocation().x, touch->getLocation().y);
     
     return true;
 }

@@ -25,16 +25,17 @@ public:
     int getNumber();
     void setIsMoving(bool isMoving);
     bool getIsMoving();
+    void increaseNumOfMovesByOne();
+    int getNumOfMoves();
     void setWidth(float width);
     void setScreenWidth(float screenWidth);
-    void setMainGrid(cocos2d::Sprite* mainGrid);
     
     bool equals(Tile2048* tile);
     void merge(Tile2048* tile);
     void clear();
     void setPositionBasedOnRowColumn(int row, int col);
     
-    void move(Direction direction, int numOfTiles);
+    void move(Direction direction);
     bool isEmpty();
     
     void runPopAnimation();
@@ -42,14 +43,13 @@ public:
     void actionFinished();
     void resetPosition();
 protected:
-    cocos2d::Sprite* mainGrid;
     int number;
     int row;
     int col;
+    int numOfMoves;
     float width;
     float screenWidth;
     cocos2d::Vec2 prevPostition;
-    Tile2048* dummyTile;
     bool isMoving;
     
     cocostudio::timeline::ActionTimeline* timeline;

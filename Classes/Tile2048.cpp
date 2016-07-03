@@ -19,6 +19,7 @@ bool Tile2048::init()
     }
     
     number = 0;
+    numOfMoves = 0;
     
     this->timeline = CSLoader::createTimeline("Tile.csb");
     
@@ -59,32 +60,21 @@ void Tile2048::setNumber(int number)
     bg->setTexture(imageName);
 }
 
-void Tile2048::move(Direction direction, int numOfTiles)
+void Tile2048::move(Direction direction)
 {
     MoveBy *move_action;
     this->prevPostition = this->getPosition();
     float dif = (this->screenWidth * 0.96 - this->width * ROWS) / float(ROWS + 1);
-    if (numOfTiles == ROWS)
-        numOfTiles = ROWS - 1;
-    float distance = (this->width + dif) * numOfTiles;
+    
+    float distance = (this->width + dif) * numOfMoves;
     switch (direction) {
         case Direction::LEFT:
         {
-//            if (this->getPosition().x - distance < -width)
-//            {
-//                CCLOG("-------------------position %f < %f", this->getPosition().x - distance, -width);
-//                distance = (this->width + dif) * (numOfTiles - 1);
-//            }
             move_action = MoveBy::create(SLIDE_ANIMATION_TIME, Point(-distance, 0));  // create move left action
         }
             break;
         case Direction::RIGHT:
         {
-//            if (this->getPosition().x + distance > (this->screenWidth + width))
-//            {
-//                CCLOG("-------------------position %f > %f", this->getPosition().x + distance, (this->screenWidth + width));
-//                distance = (this->width + dif) * (numOfTiles - 1);
-//            }
             move_action = MoveBy::create(SLIDE_ANIMATION_TIME, Point(distance, 0));  // create move right action
         }
             break;
@@ -100,21 +90,10 @@ void Tile2048::move(Direction direction, int numOfTiles)
             break;
     }
     this->runAction(move_action);
-//    this->dummyTile = dynamic_cast<Tile2048*>(CSLoader::createNode("Tile.csb"));
-//    dummyTile->setNumber(this->number);
-//    dummyTile->setAnchorPoint(Vec2(0.5f, 0.5f));
-//    dummyTile->setPosition(this->getPosition());
-//    mainGrid->addChild(dummyTile);
-//    auto callback = CallFunc::create( this, callfunc_selector(Tile2048::actionFinished) );
-//    auto sequence = Sequence::create(move_action, callback, nullptr);
-//    this->setVisible(false);
-//    this->runAction(sequence);
 }
 
 void Tile2048::actionFinished()
 {
-//    this->mainGrid->removeChild(dummyTile, true);
-//    this->setVisible(true);
     resetPosition();
 }
 
@@ -179,11 +158,6 @@ void Tile2048::setWidth(float width)
     this->width = width;
 }
 
-void Tile2048::setMainGrid(cocos2d::Sprite *mainGrid)
-{
-    this->mainGrid = mainGrid;
-}
-
 void Tile2048::setScreenWidth(float screenWidth)
 {
     this->screenWidth = screenWidth;
@@ -192,9 +166,21 @@ void Tile2048::setScreenWidth(float screenWidth)
 void Tile2048::setIsMoving(bool isMoving)
 {
     this->isMoving = isMoving;
+    if (isMoving == false)
+        numOfMoves = 0;
 }
 
 bool Tile2048::getIsMoving()
 {
     return this->isMoving;
+}
+
+int Tile2048::getNumOfMoves()
+{
+    return this->numOfMoves;
+}
+
+void Tile2048::increaseNumOfMovesByOne()
+{
+    this->numOfMoves++;
 }
