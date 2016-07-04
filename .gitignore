@@ -69,6 +69,7 @@ proj.android/build/
 proj.android/gen/*
 proj.android/bin/*
 proj.android/assets/*
+proj.android/libs/*
 
 proj.android/.gradle/*
 proj.android/.idea/*
