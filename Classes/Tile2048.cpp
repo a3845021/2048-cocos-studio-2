@@ -41,6 +41,7 @@ void Tile2048::resetPosition()
     float dif = (this->screenWidth * 0.96 - this->width * ROWS) / float(ROWS + 1);
     this->setPosition(dif + float(col) * (this->width + dif) + width / 2.0f,
                       float(ROWS - row) * (this->width + dif) - width / 2.0f);
+    this->setScale(1.0f);
 }
 
 void Tile2048::setNumber(int number)

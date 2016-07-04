@@ -4,6 +4,42 @@
 #include "Tile2048Reader.h"
 #include <cmath>
 #include "Constants.h"
+#include "CCNativeAlert.h"
+
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"
+#include "PluginAdMob/PluginAdMob.h"
+
+USING_NS_CC;
+
+#ifdef SDKBOX_ENABLED
+
+class IMListener : public sdkbox::AdMobListener {
+public:
+    virtual void adViewDidReceiveAd(const std::string &name) {
+        CCLOG("adViewDidReceiveAd");
+        sdkbox::PluginAdMob::show("home");
+    }
+    virtual void adViewDidFailToReceiveAdWithError(const std::string &name, const std::string &msg) {
+        CCLOG("adViewDidFailToReceiveAdWithError");
+    }
+    virtual void adViewWillPresentScreen(const std::string &name) {
+        CCLOG("adViewWillPresentScreen");
+    }
+    virtual void adViewDidDismissScreen(const std::string &name) {
+        CCLOG("adViewDidDismissScreen");
+    }
+    virtual void adViewWillDismissScreen(const std::string &name) {
+        CCLOG("adViewWillDismissScreen");
+        
+        if (name == "gameover") {
+            sdkbox::PluginAdMob::cache("gameover");
+        }
+    }
+    virtual void adViewWillLeaveApplication(const std::string &name) {
+        CCLOG("adViewWillLeaveApplication");
+    }
+};
+#endif
 
 USING_NS_CC;
 
@@ -87,6 +123,10 @@ bool HelloWorld::init()
         return false;
     }
     
+    this->setKeypadEnabled(true);
+    
+    sdkbox::PluginGoogleAnalytics::logEvent("Open App", "Init", "Init Screen", 1);
+    
     auto rootNode = CSLoader::createNode("MainScene.csb");
     def = UserDefault::sharedUserDefault();
     this->bestScore = def->getIntegerForKey("highscore", 0);
@@ -107,16 +147,21 @@ bool HelloWorld::init()
     auto bestBg = rootNode->getChildByName("bestBg");
     this->bestText = bestBg->getChildByName<cocos2d::ui::Text*>("bestText");
     this->btnNewgame = rootNode->getChildByName<cocos2d::ui::Button*>("btnNewgame");
+    this->btnUndo = rootNode->getChildByName<cocos2d::ui::Button*>("btnUndo");
     this->btnNewgame->addTouchEventListener(CC_CALLBACK_2(HelloWorld::newgame, this));
+    this->btnUndo->addTouchEventListener(CC_CALLBACK_2(HelloWorld::undo, this));
     
     showScore();
-    
     
     Size size = Director::getInstance()->getVisibleSize();
     rootNode->setContentSize(size);
     ui::Helper::doLayout(rootNode);
     
     addChild(rootNode);
+    
+    sdkbox::PluginAdMob::setListener(new IMListener());
+    sdkbox::PluginAdMob::cache("home");
+    sdkbox::PluginAdMob::cache("gameover");
     
     return true;
 }
@@ -153,6 +198,10 @@ void HelloWorld::newgame(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventT
                 this->tileArray.at(index1)->runPopAnimation();
                 
                 int index2 = generateRandomIndex(0, ROWS * ROWS);
+                if (index2 == index1)
+                {
+                    index2 = generateRandomIndex(0, ROWS * ROWS);
+                }
                 this->tileArray.at(index2)->setNumber(4);
                 this->tileArray.at(index2)->runPopAnimation();
                 
@@ -167,6 +216,18 @@ void HelloWorld::newgame(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventT
             break;
     }
     
+}
+
+void HelloWorld::undo(cocos2d::Ref *pSender, cocos2d::ui::Widget::TouchEventType type)
+{
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < ROWS; j++)
+        {
+            tileArray.at(i * ROWS + j)->setNumber(undoArray[i * ROWS + j]);
+        }
+    }
+    this->btnUndo->setVisible(false);
 }
 
 void HelloWorld::setupGrid()
@@ -192,6 +253,7 @@ void HelloWorld::setupGrid()
     
     
     tileArray.reserve(ROWS * ROWS);
+    memset(undoArray, 0, ROWS * ROWS);
     
     for (int row = 0; row < ROWS; row++)
     {
@@ -295,14 +357,19 @@ void HelloWorld::update(float dt)
 
 void HelloWorld::displayGameOver()
 {
+    float random = CCRANDOM_0_1();
+    if (random < 0.5f)
+        sdkbox::PluginAdMob::show("gameover");
     this->overText->setString("GAME OVER!");
     this->overText->setVisible(true);
+    this->btnUndo->setVisible(false);
 }
 
 void HelloWorld::displayWin()
 {
     this->overText->setString("YOU WIN!");
     this->overText->setVisible(true);
+    this->btnUndo->setVisible(false);
 }
 
 bool HelloWorld::checkFull()
@@ -360,6 +427,15 @@ void HelloWorld::onSwipe(Direction direction)
 {
     if (gameOver)
         return;
+    
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < ROWS; j++)
+        {
+            undoArray[i * ROWS + j] = tileArray.at(i * ROWS + j)->getNumber();
+        }
+    }
+    
     switch (direction) {
         case Direction::LEFT:
         {
@@ -382,6 +458,7 @@ void HelloWorld::onSwipe(Direction direction)
         }
             break;
     }
+    this->btnUndo->setVisible(true);
     
     showScore();
     
@@ -927,4 +1004,24 @@ void HelloWorld::onTouchEnded(Touch *touch, Event *event)
 void HelloWorld::onTouchCancelled(Touch *touch, Event *event)
 {
     onTouchEnded(touch, event);
+}
+
+void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keyCode, cocos2d::Event *event)
+{
+    if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE
+        || keyCode == EventKeyboard::KeyCode::KEY_BACK) {
+        cocos2d::NativeAlert::showWithCallback("Exit Game", "Do you want to exit?", "No", "Yes", "", 404, CC_CALLBACK_2(HelloWorld::onQuitGame, this) );
+    }
+    else if(keyCode == EventKeyboard::KeyCode::KEY_MENU)
+    {
+        CCLOG("You pressed menu button");
+    }
+}
+
+void HelloWorld::onQuitGame(int tag, cocos2d::NativeAlert::ButtonType type)
+{
+    if (type == NativeAlert::ButtonType::RETURN)
+    {
+        Director::getInstance()->end();
+    }
 }

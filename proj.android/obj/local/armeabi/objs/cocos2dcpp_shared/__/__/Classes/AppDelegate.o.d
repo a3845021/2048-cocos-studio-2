@@ -459,7 +459,10 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/AppDelegate.o: \
  /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../ui/UIScale9Sprite.h \
  /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../ui/UIEditBox/UIEditBox.h \
  /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../ui/UILayoutComponent.h \
- /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../editor-support/cocostudio/CocosStudioExtension.h
+ /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../editor-support/cocostudio/CocosStudioExtension.h \
+ jni/../../Classes/CCNativeAlert.h \
+ jni/PluginGoogleAnalytics/PluginGoogleAnalytics.h \
+ jni/PluginAdMob/PluginAdMob.h
 
 jni/../../Classes/AppDelegate.h:
 
@@ -1384,3 +1387,9 @@ jni/../../Classes/Constants.h:
 /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../ui/UILayoutComponent.h:
 
 /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../editor-support/cocostudio/CocosStudioExtension.h:
+
+jni/../../Classes/CCNativeAlert.h:
+
+jni/PluginGoogleAnalytics/PluginGoogleAnalytics.h:
+
+jni/PluginAdMob/PluginAdMob.h:

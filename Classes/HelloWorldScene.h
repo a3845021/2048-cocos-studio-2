@@ -5,6 +5,7 @@
 #include "Tile2048.h"
 #include "Constants.h"
 #include "ui/CocosGUI.h"
+#include "CCNativeAlert.h"
 
 class HelloWorld : public cocos2d::Layer
 {
@@ -25,6 +26,9 @@ public:
     void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event) override;
     void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event) override;
     void onTouchCancelled(cocos2d::Touch *touch, cocos2d::Event *event) override;
+    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *event) override;
+    void onQuitGame(int tag, cocos2d::NativeAlert::ButtonType type);
+
     
     bool isTouchDown;
     
@@ -39,7 +43,9 @@ protected:
     cocos2d::ui::Text* bestText;
     cocos2d::ui::Text* overText;
     cocos2d::ui::Button* btnNewgame;
+    cocos2d::ui::Button* btnUndo;
     cocos2d::Vector<Tile2048*> tileArray;
+    int undoArray[ROWS * ROWS];
     float tileWidth;
     int score;
     int undoScore;

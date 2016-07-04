@@ -5,18 +5,18 @@
         <LuaIsEncrypt Value="False" />
         <LuaEncryptKey Value="" />
         <LuaEncryptSign Value="" />
-        <Android_PackageName Value="org.cocos.game2048" />
-        <AndroidkeyStore Value="" />
+        <Android_PackageName Value="com.somestudio.open2048" />
+        <AndroidkeyStore Value="/Users/applehouse/Documents/CocosProjects/2048Clone/publish/2048Clone.keystore" />
         <AndroidVersion Value="android-22" />
         <iOS_Target Value="2048Clone-mobile" />
         <iOS_BundleID Value="iPhone Distribution: Hoan Van Tran (9HFTTBVVWJ)" />
-        <Platform Value="None" />
+        <Platform Value="Android" />
         <RunPlatform Value="Android" />
         <FrameworkVersion Value="cocos2d-x-3.10" />
-        <IsDebugKeystore Value="True" />
-        <KeystorePassword Value="" />
-        <KeystoreAliasName Value="" />
-        <KeystoreAliasPassword Value="" />
+        <IsDebugKeystore Value="False" />
+        <KeystorePassword Value="huunguyenchi91" />
+        <KeystoreAliasName Value="open2048" />
+        <KeystoreAliasPassword Value="huunguyenchi91" />
         <EnableSourceMap Value="False" />
         <EnableHTML5Advanced Value="False" />
       </Value>
@@ -26,14 +26,6 @@
         <LastPublishType Value="XCode" />
         <IsLastPublish Value="True" />
         <LastRunType Value="Android" />
-      </Value>
-    </Item>
-    <Item Key="TabsParamsKey">
-      <Value ctype="TabsInfo">
-        <OpenedDocuments>
-          <FilePathData Path="MainScene.csd" />
-        </OpenedDocuments>
-        <ActiveDocument Path="MainScene.csd" />
       </Value>
     </Item>
   </Properties>

@@ -460,10 +460,12 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/HelloWorldScene.o: \
  /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../ui/UIEditBox/UIEditBox.h \
  /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../ui/UILayoutComponent.h \
  /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../editor-support/cocostudio/CocosStudioExtension.h \
- jni/../../Classes/Tile2048Reader.h \
+ jni/../../Classes/CCNativeAlert.h jni/../../Classes/Tile2048Reader.h \
  /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/editor-support/cocostudio/prebuilt-mk/../../cocostudio/WidgetReader/NodeReader/NodeReader.h \
  /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/editor-support/cocostudio/prebuilt-mk/../../cocostudio/WidgetReader/NodeReaderProtocol.h \
- /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/editor-support/cocostudio/prebuilt-mk/../../cocostudio/WidgetReader/NodeReaderDefine.h
+ /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/editor-support/cocostudio/prebuilt-mk/../../cocostudio/WidgetReader/NodeReaderDefine.h \
+ jni/PluginGoogleAnalytics/PluginGoogleAnalytics.h \
+ jni/PluginAdMob/PluginAdMob.h
 
 jni/../../Classes/HelloWorldScene.h:
 
@@ -1387,6 +1389,8 @@ jni/../../Classes/Constants.h:
 
 /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/3d/prebuilt-mk/../../editor-support/cocostudio/CocosStudioExtension.h:
 
+jni/../../Classes/CCNativeAlert.h:
+
 jni/../../Classes/Tile2048Reader.h:
 
 /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/editor-support/cocostudio/prebuilt-mk/../../cocostudio/WidgetReader/NodeReader/NodeReader.h:
@@ -1394,3 +1398,7 @@ jni/../../Classes/Tile2048Reader.h:
 /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/editor-support/cocostudio/prebuilt-mk/../../cocostudio/WidgetReader/NodeReaderProtocol.h:
 
 /Applications/Cocos/cocos2d-x/cocos2d-x-3.10/cocos/editor-support/cocostudio/prebuilt-mk/../../cocostudio/WidgetReader/NodeReaderDefine.h:
+
+jni/PluginGoogleAnalytics/PluginGoogleAnalytics.h:
+
+jni/PluginAdMob/PluginAdMob.h:

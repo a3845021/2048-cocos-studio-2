@@ -1,5 +1,7 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
+#include "PluginGoogleAnalytics/PluginGoogleAnalytics.h"
+#include "PluginAdMob/PluginAdMob.h"
 
 USING_NS_CC;
 
@@ -23,6 +25,13 @@ void AppDelegate::initGLContextAttrs()
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
+    // init gg analytics
+    
+    sdkbox::PluginGoogleAnalytics::init();
+    sdkbox::PluginAdMob::init();
+    
+    sdkbox::PluginGoogleAnalytics::startSession();
+    
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
@@ -34,7 +43,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->getOpenGLView()->setDesignResolutionSize(640, 960, ResolutionPolicy::FIXED_WIDTH);
 
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
@@ -61,7 +70,7 @@ void AppDelegate::applicationDidEnterBackground() {
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground() {
     Director::getInstance()->startAnimation();
-
     // if you use SimpleAudioEngine, it must resume here
     // SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+    
 }
